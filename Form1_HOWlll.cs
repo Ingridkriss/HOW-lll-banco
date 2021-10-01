@@ -117,7 +117,86 @@ namespace HOW_lll
         }
     }
 }
+private void botao_editar_Click(object sender, EventArgs e)
+        {
+            MySqlConnectionStringBuilder conexaoBD = conexaoBanco();
+            MySqlConnection realizaConexacoBD = new MySqlConnection(conexaoBD.ToString());
+            try
+            {
+                realizaConexacoBD.Open(); //Abre a conexão com o banco
+                MySqlCommand comandoMySql = realizaConexacoBD.CreateCommand(); //Crio um comando SQL
+                comandoMySql.CommandText = "UPDATE livro SET generoLivro = '" + tb_genero.Text + "', " +
+                    "tituloLivro = '" + tb_titulo.Text + "', " +
+                    "autorLivro = '" + tb_autor.Text + "', " +
+                     "editoraLivro = '" + tb_editora.Text + "', " +
+                    "descicaoLivro = '" + tb_descricao.Text + "', " +
+                    "anoLivro = " + Convert.ToInt16(tb_ano.Text) +
+                    " WHERE codigoLivro = " + tb_codigo.Text + "";
+                comandoMySql.ExecuteNonQuery();
 
+                realizaConexacoBD.Close(); // Fecho a conexão com o banco
+                MessageBox.Show("Atualizado com sucesso"); //Exibo mensagem de aviso
+                atualizarGrid();
+                limparCampos();
+            }
+            catch (Exception ex)
+            {
+                //MessageBox.Show("Não foi possivel abrir a conexão! ");
+                Console.WriteLine(ex.Message);
+            }
+
+            }
+
+        private void botao_excluir_Click(object sender, EventArgs e)
+        {
+            MySqlConnectionStringBuilder conexaoBD = conexaoBanco();
+            MySqlConnection realizaConexacoBD = new MySqlConnection(conexaoBD.ToString());
+            try
+            {
+                realizaConexacoBD.Open(); //Abre a conexão com o banco
+                
+                MySqlCommand comandoMySql = realizaConexacoBD.CreateCommand(); //Crio um comando SQL
+                // "DELETE FROM filme WHERE idFilme = "+ textBoxId.Text +""
+                //comandoMySql.CommandText = "DELETE FROM filme WHERE idFilme = " + tbID.Text + "";
+                comandoMySql.CommandText = "DELETE FROM livro WHERE codigoLivro = " + tb_codigo.Text + "";
+                
+                comandoMySql.ExecuteNonQuery();
+
+                realizaConexacoBD.Close(); // Fecho a conexão com o banco
+                MessageBox.Show("Deletado com sucesso"); //Exibo mensagem de aviso
+                atualizarGrid();
+                limparCampos();
+            }
+            catch (Exception ex)
+            {
+                //MessageBox.Show("Não foi possivel abrir a conexão! ");
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        private void dtgrid_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (dtgrid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value != null)
+            {
+                dtgrid.CurrentRow.Selected = true;
+                //preenche os textbox com as células da linha selecionada
+                tb_codigo.Text = dtgrid.Rows[e.RowIndex].Cells["Coluna_codigo"].FormattedValue.ToString();
+                tb_genero.Text = dtgrid.Rows[e.RowIndex].Cells["Coluna_genero"].FormattedValue.ToString();
+                tb_titulo.Text = dtgrid.Rows[e.RowIndex].Cells["Coluna_titulo"].FormattedValue.ToString();
+                tb_autor.Text = dtgrid.Rows[e.RowIndex].Cells["Coluna_autor"].FormattedValue.ToString();
+                tb_ano.Text = dtgrid.Rows[e.RowIndex].Cells["Coluna_ano"].FormattedValue.ToString();
+                tb_editora.Text = dtgrid.Rows[e.RowIndex].Cells["Coluna_editora"].FormattedValue.ToString();
+                tb_descricao.Text = dtgrid.Rows[e.RowIndex].Cells["Coluna_descricao"].FormattedValue.ToString();
+
+            }
+        }
+
+        private void botao_novo_Click(object sender, EventArgs e)
+        {
+            limparCampos();
+        }
+    }
+    }
         
    
         
